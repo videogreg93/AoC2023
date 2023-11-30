@@ -1,0 +1,168 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    maven { url 'https://s01.oss.sonatype.org' }
+    mavenLocal()
+    google()
+    gradlePluginPortal()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+
+  }
+}
+
+allprojects {
+  apply plugin: 'eclipse'
+  apply plugin: 'idea'
+}
+
+configure(subprojects) {
+  apply plugin: 'java-library'
+  apply plugin: 'kotlin'
+  sourceCompatibility = 11
+  compileJava {
+    options.incremental = true
+  }
+
+  kotlin {
+    jvmToolchain(11)
+  }
+}
+
+subprojects {
+  version = '1.0.0'
+  ext.appName = 'ProtoGaia'
+  repositories {
+    mavenCentral()
+    maven { url 'https://s01.oss.sonatype.org' }
+    // You may want to remove the following line if you have errors downloading dependencies.
+    mavenLocal()
+    gradlePluginPortal()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url 'https://jitpack.io' }
+  }
+}
+
+eclipse.project.name = 'ProtoGaia' + '-parent'
+
+task regenerateImages() {
+  def builder = new StringBuilder()
+  def newLine = System.getProperty("line.separator")
+  def project = './'
+  def assetsFolder = './assets'
+  def source = 'core/src/main/kotlin'
+  def pack = 'com.odencave.assets'
+  def fileName = 'Assets.kt'
+  builder.append("""package ${pack}
+
+/** Generated from the assets folder. */
+object Assets {
+
+""")
+  ext.capitalize = { String s ->
+    return s.substring(0, 1).toUpperCase() + s.substring(1)
+  }
+  ext.isImage = { String name ->
+    return name.contains('.png') || name.contains('.jpg') || name.contains('.jpeg')
+  }
+  ext.isSound = { String name ->
+    return name.contains('.mp3') || name.contains('.wav') || name.contains('.ogg')
+  }
+  ext.isFont = { String name ->
+    return name.contains('.ttf') || name.contains('.otf')
+  }
+  ext.isValidAsset = { String name ->
+    return isImage(name) || isSound(name) || isFont(name)
+  }
+  ext.cleanImage = { String name ->
+    def newName = name
+      .replace(".png", "")
+      .replace(".jpg", "")
+      .replace(".jpeg", "")
+      .replace(".mp3", "")
+      .replace(".wav", "")
+      .replace(".ttf", "")
+      .replace(".otf", "")
+      .replace("-", "_")
+      .replace(".", "_")
+      .replace(" ", "_")
+      .replace(",", "_")
+    if (Character.isDigit(newName.charAt(0))) {
+      newName = "n$newName"
+    }
+    if (isSound(name)) {
+      newName = newName + "_sound"
+    }
+    return newName
+  }
+  ext.printFile = { File[] files ->
+    files.each {
+      if (it.file && isValidAsset(it.name)) {
+        def varName = cleanImage(it.name)
+        def varPath = it.canonicalPath.split("assets")[1].replace('\\', '/').substring(1)
+        builder.append(newLine).append("const val $varName = \"").append(varPath).append('"')
+      } else if (it.isDirectory()) {
+        builder.append("""
+    object ${cleanImage(capitalize(it.name))} {""")
+        printFile(it.listFiles())
+        builder.append("}")
+      }
+    }
+  }
+  printFile(file(assetsFolder).listFiles())
+  builder.append(newLine).append("}")
+  // Write to file
+  def path = project + File.separator + source + File.separator +
+    File.separator + fileName
+  println("Saving Assets at ${path}...")
+  def assetsFile = file(path)
+  delete assetsFile
+  assetsFile.getParentFile().mkdirs()
+  assetsFile.createNewFile()
+  assetsFile << builder << newLine
+  println("Done. Assets file generated.")
+}
+
+task nls() {
+  def project = './'             // Will contain generated enum class.
+  def source = 'core/src/main/kotlin'   // Kotlin source path of the project.
+  def pack = 'com.odencave.i18n'    // Enum target package.
+  def name = 'Nls'                 // Enum class name.
+  def fileName = 'nls.kt'          // Name of Kotlin file containing the enum.
+  def bundle = './assets/i18n/nls.properties' // Path to i18n bundle file.
+
+  println("Processing i18n bundle file at ${bundle}...")
+  def builder = new StringBuilder()
+  builder.append("""package ${pack}
+import ktx.i18n.BundleLine
+/** Generated from ${bundle} file. */
+enum class ${name} : BundleLine {
+""")
+  def newLine = System.getProperty("line.separator")
+  file(bundle).eachLine {
+    def data = it.trim()
+    def separator = data.indexOf('=')
+    if (!data.isEmpty() && separator > 0 && !data.startsWith('#')) {
+      def id = data.substring(0, separator)
+      builder.append('    ').append("/** ${data.substring(separator+1)} **/").append(newLine).append('    ').append(id).append(',').append(newLine)
+    }
+  }
+  // If you want a custom enum body, replace the following append:
+  builder.append('    ;').append(newLine).append('}').append(newLine)
+
+  source = source.replace('/', File.separator)
+  pack = pack.replace('.', File.separator)
+  def path = project + File.separator + source + File.separator + "generated" +
+    File.separator + fileName
+  println("Saving i18n bundle enum at ${path}...")
+  def enumFile = file(path)
+  delete enumFile
+  enumFile.getParentFile().mkdirs()
+  enumFile.createNewFile()
+  enumFile << builder << newLine
+  println("Done. I18n bundle enum generated.")
+}
