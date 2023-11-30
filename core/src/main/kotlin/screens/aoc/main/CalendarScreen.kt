@@ -20,15 +20,19 @@ class CalendarScreen: BasicScreen("Calendar Screen") {
     override fun firstShown() {
         super.firstShown()
         backgroundCrew.addMembers(getBackground4())
-        val buttons = (0..25).map {
+        val buttons = (0..24).map {
             val dayScreen = existingDays.getOrNull(it)
             DayButton((it + 1).toString(), dayScreen)
         }
-        val startingMargin = (-Globals.WORLD_WIDTH/2f + 100f)
+        val startingMargin = (-Globals.WORLD_WIDTH/2f + 170f)
         val margin = 50f
+        val yMargin = 50f
+        val itemsPerRow = 7
         buttons.forEachIndexed { index, dayButton ->
-            val xPos = startingMargin + index * (margin + dayButton.width)
-            dayButton.setPosition(xPos, 0f)
+            val xPos = startingMargin + (index % itemsPerRow) * (margin + dayButton.width)
+            val row = (index / itemsPerRow)
+            val yPos = 250f - row * (dayButton.height + yMargin)
+            dayButton.setPosition(xPos, yPos)
             crew.addMember(dayButton)
         }
     }

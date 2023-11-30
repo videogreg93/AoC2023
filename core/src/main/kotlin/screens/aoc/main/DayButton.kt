@@ -35,6 +35,9 @@ class DayButton(dayNumber: String, val screen: BasicScreen?): BaseNinePatchActor
         children.add(label)
         width = 175f
         height = 200f
+        if (!enabled) {
+            isPressed = true
+        }
     }
 
     companion object {
@@ -44,7 +47,7 @@ class DayButton(dayNumber: String, val screen: BasicScreen?): BaseNinePatchActor
         @Asset
         private val buttonPressedTexture = AssetDescriptor(Assets.Buttons.button_pressed, Texture::class.java)
 
-        private fun buttonNinePatch() = NinePatch(buttonTexture.get(), 6, 6, 6 ,6 )
-        private fun buttonPressedNinePatch() = NinePatch(buttonPressedTexture.get(), 6, 6, 6 ,6 )
+        private fun buttonNinePatch() = NinePatch(buttonTexture.get(), 24, 24, 24 ,24 )
+        private fun buttonPressedNinePatch() = NinePatch(buttonPressedTexture.get(), 24, 24, 24 ,24 )
     }
 }
