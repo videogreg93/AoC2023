@@ -1,0 +1,50 @@
+package screens.aoc.main
+
+import com.badlogic.gdx.assets.AssetDescriptor
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.NinePatch
+import com.odencave.assets.Assets
+import gaia.base.BaseNinePatchActor
+import gaia.managers.MegaManagers
+import gaia.managers.assets.Asset
+import gaia.managers.assets.AssetManager.Companion.get
+import gaia.ui.generic.Label
+import gaia.ui.utils.addForeverAction
+import ui.BasicScreen
+import kotlin.properties.Delegates
+
+class DayButton(dayNumber: String, val screen: BasicScreen?): BaseNinePatchActor(buttonNinePatch()) {
+    val notPressedNinePatch = buttonNinePatch()
+    val pressedNinePatch = buttonPressedNinePatch()
+    val enabled: Boolean = screen != null
+    private val label = Label(dayNumber, MegaManagers.fontManager.defaultFont).apply {
+        addForeverAction {
+            centerOn(this@DayButton)
+        }
+    }
+
+    var isPressed by Delegates.observable(false) { property, oldValue, newValue ->
+        ninePatch = if (newValue) {
+            pressedNinePatch
+        } else {
+            notPressedNinePatch
+        }
+    }
+
+    init {
+        children.add(label)
+        width = 175f
+        height = 200f
+    }
+
+    companion object {
+        @Asset
+        private val buttonTexture = AssetDescriptor(Assets.Buttons.button, Texture::class.java)
+
+        @Asset
+        private val buttonPressedTexture = AssetDescriptor(Assets.Buttons.button_pressed, Texture::class.java)
+
+        private fun buttonNinePatch() = NinePatch(buttonTexture.get(), 6, 6, 6 ,6 )
+        private fun buttonPressedNinePatch() = NinePatch(buttonPressedTexture.get(), 6, 6, 6 ,6 )
+    }
+}
