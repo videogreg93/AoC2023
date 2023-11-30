@@ -4,6 +4,7 @@ package com.odencave.assets
 object Assets {
 
 
+const val slider_bar = "slider_bar.png"
     object Skins {
 const val uiskin = "skins/uiskin.png"
 const val default = "skins/default.png"}
@@ -16,6 +17,7 @@ const val cone = "shaders/cone.png"
 const val out = "shaders/out.png"
 const val leftToRight2 = "shaders/leftToRight2.png"
 const val close = "shaders/close.png"}
+const val slider_button = "slider_button.png"
     object I18n {}
     object Fonts {
 const val FOT_NewRodin_Pro_EB = "fonts/FOT-NewRodin Pro EB.otf"}

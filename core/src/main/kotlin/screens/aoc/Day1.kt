@@ -19,7 +19,7 @@ class Day1: AdventScreen("day1") {
 
     class Elf: BaseActor(texture.get()) {
         var weight = 0
-        private val label = Label("0", MegaManagers.fontManager.defaultFont).apply {
+        private val label = Label("", MegaManagers.fontManager.defaultFont).apply {
             center()
             alignTop(-50f)
             addForeverAction {
@@ -121,6 +121,6 @@ class Day1: AdventScreen("day1") {
     }
 
     override fun onAction(action: ActionListener.InputAction): Boolean {
-        return true
+        return super.onAction(action)
     }
 }
