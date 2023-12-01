@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.odencave.assets.Assets
 import gaia.base.BaseNinePatchActor
+import gaia.base.Clickable
 import gaia.managers.MegaManagers
 import gaia.managers.assets.Asset
 import gaia.managers.assets.AssetManager.Companion.get
@@ -13,7 +14,7 @@ import gaia.ui.utils.addForeverAction
 import ui.BasicScreen
 import kotlin.properties.Delegates
 
-class DayButton(dayNumber: String, val screen: BasicScreen?): BaseNinePatchActor(buttonNinePatch()) {
+class DayButton(dayNumber: String, val screen: BasicScreen?): BaseNinePatchActor(buttonNinePatch()), Clickable {
     val notPressedNinePatch = buttonNinePatch()
     val pressedNinePatch = buttonPressedNinePatch()
     val enabled: Boolean = screen != null
@@ -37,6 +38,21 @@ class DayButton(dayNumber: String, val screen: BasicScreen?): BaseNinePatchActor
         height = 200f
         if (!enabled) {
             isPressed = true
+        }
+    }
+
+    override fun onClick(): Boolean {
+        return if (enabled && screen != null) {
+            isPressed = true
+            true
+        } else {
+            false
+        }
+    }
+
+    fun goToScreen() {
+        if (screen != null) {
+            MegaManagers.screenManager.changeScreen(screen)
         }
     }
 
