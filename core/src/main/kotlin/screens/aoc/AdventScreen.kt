@@ -2,9 +2,12 @@ package screens.aoc
 
 import Globals
 import com.badlogic.gdx.Gdx
+import gaia.base.Clickable
 import gaia.managers.input.ActionListener
+import gaia.ui.utils.addForeverAction
 import gaia.ui.utils.alignBottom
 import gaia.ui.utils.alignLeft
+import gaia.ui.utils.alignLeftToRightOf
 import ui.BasicScreen
 
 abstract class AdventScreen(day: String): BasicScreen(day) {
@@ -17,6 +20,8 @@ abstract class AdventScreen(day: String): BasicScreen(day) {
         return file.file().readLines()
     }
 
+    abstract fun isDone(): Boolean
+
     override fun firstShown() {
         super.firstShown()
         val slider = SpeedSlider("Speed").apply {
@@ -28,19 +33,35 @@ abstract class AdventScreen(day: String): BasicScreen(day) {
                 Globals.gameSpeed = goodValue
             }
         }
-        crew.addMember(slider)
+        val insaneButton = InsaneButton().apply {
+            addForeverAction {
+                centerOn(slider)
+                alignLeftToRightOf(slider, 20f)
+            }
+        }
+        hudCrew.addMembers(slider, insaneButton)
+    }
+
+    override fun render(delta: Float) {
+        super.render(delta)
+        if (isDone()) Globals.gameSpeed = 1f
     }
 
     override fun onAction(action: ActionListener.InputAction): Boolean {
         when (action) {
             ActionListener.InputAction.CLICK -> {
-                getMembersUnderMouse().firstOrNull()?.let {
+                getMembersUnderMouse(hudCrew.members).firstOrNull()?.let {
                     when (it) {
                         is SpeedSlider -> {
                             val mousePos = getMousePosition()
                             it.startFollowingMouse(mousePos.x, mousePos.y)
                             heldSliderButton = it
                         }
+                        is Clickable -> {
+                            it.onClick()
+                        }
+
+                        else -> {}
                     }
                 }
             }

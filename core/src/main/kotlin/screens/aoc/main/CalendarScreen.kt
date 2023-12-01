@@ -35,19 +35,20 @@ class CalendarScreen: BasicScreen("Calendar Screen") {
             val row = (index / itemsPerRow)
             val yPos = 250f - row * (dayButton.height + yMargin)
             dayButton.setPosition(xPos, yPos)
-            crew.addMember(dayButton)
+            hudCrew.addMember(dayButton)
         }
     }
 
     override fun render(delta: Float) {
         super.render(delta)
         timeSinceClick += delta
+        println(timeSinceClick)
     }
 
     override fun onAction(action: ActionListener.InputAction): Boolean {
         when (action) {
             ActionListener.InputAction.CLICK -> {
-                getMembersUnderMouse().filterIsInstance<DayButton>().firstOrNull()?.let {
+                getMembersUnderMouse(hudCrew.members).filterIsInstance<DayButton>().firstOrNull()?.let {
                     if (it.enabled) {
                         it.onClick()
                         timeSinceClick = 0f
@@ -62,9 +63,9 @@ class CalendarScreen: BasicScreen("Calendar Screen") {
     override fun onActionReleased(action: ActionListener.InputAction): Boolean {
         when (action) {
             ActionListener.InputAction.CLICK -> {
-                getMembersUnderMouse().filterIsInstance<DayButton>().firstOrNull()?.let {
+                getMembersUnderMouse(hudCrew.members).filterIsInstance<DayButton>().firstOrNull()?.let {
                     it.isPressed = false
-                    if (timeSinceClick < 1f) {
+                    if (timeSinceClick < 0.3f) {
                         it.goToScreen()
                     }
                 }

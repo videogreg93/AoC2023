@@ -10,7 +10,9 @@ const val bg1 = "backgrounds/bg4/bg1.png"
 const val bg2 = "backgrounds/bg4/bg2.png"}}
     object Buttons {
 const val button = "buttons/button.png"
-const val button_pressed = "buttons/button_pressed.png"}
+const val button_pressed = "buttons/button_pressed.png"
+const val insane = "buttons/insane.png"
+const val insane_pressed = "buttons/insane_pressed.png"}
 const val elf = "elf.png"
     object Fonts {
 const val FOT_NewRodin_Pro_EB = "fonts/FOT-NewRodin Pro EB.otf"}

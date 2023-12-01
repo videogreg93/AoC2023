@@ -1,5 +1,6 @@
 package screens.aoc
 
+import Globals
 import base.BaseActor
 import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.graphics.Texture
@@ -21,8 +22,11 @@ class SpeedSlider(var text: String = ""): BaseActor(barTexture.get()) {
 
     var value: Float = 0f
         private set(value) {
+            val oldValue = field
             field = value.coerceIn(0f, 1f)
-            onValueChange?.invoke(field)
+            if (oldValue != field) {
+                onValueChange?.invoke(field)
+            }
         }
 
     private var followingMouse = false
@@ -38,7 +42,7 @@ class SpeedSlider(var text: String = ""): BaseActor(barTexture.get()) {
             label.centerOn(this)
             label.y += 15f
             val goodValue = ((value * 10) * 10).toInt() / 10f
-            label.text = "$text: ${(goodValue)}"
+            label.text = if (Globals.gameSpeed < 50f) "$text: ${(goodValue)}" else "Speed: INSANE"
         }))
         addAction(Actions.forever(Actions.run {
             if (followingMouse) {

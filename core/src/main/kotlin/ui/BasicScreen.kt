@@ -163,7 +163,7 @@ abstract class BasicScreen(
     }
 
     private fun updateCursor() {
-        if (getClickablesUnderMouse(hudCrew.members.toList()).isNotEmpty()) {
+        if (getClickablesUnderMouse(hudCrew.members.toList()).filter { it.enabled }.isNotEmpty()) {
             Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Hand)
         } else {
             Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow)

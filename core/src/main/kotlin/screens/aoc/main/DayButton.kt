@@ -17,7 +17,7 @@ import kotlin.properties.Delegates
 class DayButton(dayNumber: String, val screen: BasicScreen?): BaseNinePatchActor(buttonNinePatch()), Clickable {
     val notPressedNinePatch = buttonNinePatch()
     val pressedNinePatch = buttonPressedNinePatch()
-    val enabled: Boolean = screen != null
+    override var enabled: Boolean = screen != null
     private val label = Label(dayNumber, MegaManagers.fontManager.defaultFont).apply {
         addForeverAction {
             centerOn(this@DayButton)
@@ -48,6 +48,10 @@ class DayButton(dayNumber: String, val screen: BasicScreen?): BaseNinePatchActor
         } else {
             false
         }
+    }
+
+    override fun onRelease() {
+
     }
 
     fun goToScreen() {

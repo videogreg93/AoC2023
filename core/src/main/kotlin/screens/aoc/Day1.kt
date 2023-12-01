@@ -66,6 +66,10 @@ class Day1: AdventScreen("day1") {
         //println(elves.maxByOrNull { it.weight }?.weight!!)
     }
 
+    override fun isDone(): Boolean {
+        return elves.isEmpty()
+    }
+
     fun addNewElf() {
         val elf = elves.removeFirst()
         elf.setPosition(-Globals.WORLD_WIDTH/2f, 0f)
