@@ -42,7 +42,6 @@ class CalendarScreen: BasicScreen("Calendar Screen") {
     override fun render(delta: Float) {
         super.render(delta)
         timeSinceClick += delta
-        println(timeSinceClick)
     }
 
     override fun onAction(action: ActionListener.InputAction): Boolean {
