@@ -9,6 +9,7 @@ import gaia.managers.MegaManagers
 
 class FontManager : MegaManagers.Manager {
     lateinit var defaultFont: BitmapFont
+    lateinit var smallerFont: BitmapFont
 //    lateinit var titleFont: BitmapFont
 //    lateinit var pressStartFont: BitmapFont
 
@@ -19,21 +20,13 @@ class FontManager : MegaManagers.Manager {
             color = Color.WHITE
         }
         defaultFont = generator.generateFont(params)
-//
-//        val generator2 = FreeTypeFontGenerator(Gdx.files.internal(Assets.Fonts.goblin))
-//        val params2 = FreeTypeFontGenerator.FreeTypeFontParameter().apply {
-//            size = 12
-//            color = Color.valueOf("202020")
-//        }
-//        val params3 = FreeTypeFontGenerator.FreeTypeFontParameter().apply {
-//            size = 10
-//            color = Color.valueOf("202020")
-//        }
-//        titleFont = generator.generateFont(params2)
-//        pressStartFont = generator.generateFont(params3)
-//
-//
-//        generator.dispose()
-//        generator2.dispose()
+        smallerFont = generator.generateFont(
+            FreeTypeFontGenerator.FreeTypeFontParameter().apply {
+                size = 12
+                color = Color.WHITE
+            }
+        )
+
+        generator.dispose()
     }
 }

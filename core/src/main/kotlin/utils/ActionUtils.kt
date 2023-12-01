@@ -19,8 +19,8 @@ class FloatLerpAction(start: Float, end: Float, private val callback: (Float) ->
         fun createLerpAction(
             start: Float,
             end: Float,
-            duration: Float,
-            interpolation: Interpolation,
+            duration: Float = 0.4f,
+            interpolation: Interpolation = Interpolation.circleOut,
             callback: (Float) -> Unit
         ): FloatLerpAction {
             return FloatLerpAction(start, end, callback).apply {

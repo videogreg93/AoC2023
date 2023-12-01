@@ -155,6 +155,10 @@ fun BaseActor.setOffscreenTop() {
     y = WORLD_HEIGHT / 2f
 }
 
+fun BaseActor.setOffscreenLeft() {
+    x = (-WORLD_WIDTH / 2f) - width
+}
+
 /**
  * Lets you move an actor around to calculate a position. Returns the new position, but also places the actor
  * back into its original position.

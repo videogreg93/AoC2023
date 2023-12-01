@@ -7,7 +7,9 @@ object Assets {
     object Backgrounds {
     object Bg4 {
 const val bg1 = "backgrounds/bg4/bg1.png"
-const val bg2 = "backgrounds/bg4/bg2.png"}}
+const val bg2 = "backgrounds/bg4/bg2.png"}
+const val day1 = "backgrounds/day1.png"
+const val village = "backgrounds/village.png"}
     object Buttons {
 const val button = "buttons/button.png"
 const val button_pressed = "buttons/button_pressed.png"
@@ -16,8 +18,10 @@ const val insane_pressed = "buttons/insane_pressed.png"}
 const val elf = "elf.png"
     object Fonts {
 const val FOT_NewRodin_Pro_EB = "fonts/FOT-NewRodin Pro EB.otf"}
+const val house1 = "house1.png"
     object I18n {}
 const val libgdx = "libgdx.png"
+const val panel = "panel.png"
     object Shaders {
 const val close = "shaders/close.png"
 const val cone = "shaders/cone.png"

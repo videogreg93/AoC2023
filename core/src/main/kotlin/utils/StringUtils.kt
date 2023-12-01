@@ -11,7 +11,7 @@ import java.util.*
 fun String.wrapped(font: BitmapFont, maxWidth: Int): String {
     var result = ""
     var tester = ""
-    val words = this.split(" ")
+    val words = this.split("")
     words.forEachIndexed { index, word ->
         tester += "$word "
         if (index == words.size - 1) {

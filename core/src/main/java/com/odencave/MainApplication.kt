@@ -1,5 +1,6 @@
 package com.odencave
 
+import Globals
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
@@ -133,7 +134,7 @@ class MainApplication(val initialScreen: () -> BasicScreen) : KtxGame<BasicScree
         MegaManagers.eventManager.cleanup()
         handleFade()
         overlayViewport.apply()
-        overlayCrew.act(deltaTime)
+        overlayCrew.act(deltaTime * Globals.gameSpeed)
         overlayCrew.draw(MegaManagers.currentContext.inject<SpriteBatch>(), 1f)
 //        console.draw()
     }

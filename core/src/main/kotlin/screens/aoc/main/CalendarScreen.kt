@@ -8,7 +8,7 @@ import com.odencave.i18n.gaia.base.BackgroundGrid
 import gaia.managers.assets.Asset
 import gaia.managers.assets.AssetManager.Companion.get
 import gaia.managers.input.ActionListener
-import screens.aoc.Day1
+import screens.aoc.day1.Day1
 import ui.BasicScreen
 
 class CalendarScreen: BasicScreen("Calendar Screen") {

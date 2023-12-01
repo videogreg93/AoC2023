@@ -4,9 +4,7 @@ import Globals
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import com.odencave.MainApplication
-import screens.aoc.Day1
 import screens.aoc.main.CalendarScreen
-import screens.scene.SceneEditorScreen
 
 /** Launches the desktop (LWJGL3) application.  */
 object Lwjgl3Launcher {
