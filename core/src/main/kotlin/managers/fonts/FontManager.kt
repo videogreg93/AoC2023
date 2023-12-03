@@ -9,6 +9,7 @@ import gaia.managers.MegaManagers
 
 class FontManager : MegaManagers.Manager {
     lateinit var defaultFont: BitmapFont
+    lateinit var largeFont: BitmapFont
     lateinit var smallerFont: BitmapFont
 //    lateinit var titleFont: BitmapFont
 //    lateinit var pressStartFont: BitmapFont
@@ -27,6 +28,8 @@ class FontManager : MegaManagers.Manager {
             }
         )
         defaultFont.data.markupEnabled = true
+        params.size = 24
+        largeFont = generator.generateFont(params)
 
         generator.dispose()
     }

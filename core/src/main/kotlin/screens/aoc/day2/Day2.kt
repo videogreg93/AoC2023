@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.odencave.assets.Assets
+import gaia.base.BaseNinePatchActor
 import gaia.managers.MegaManagers
 import gaia.managers.assets.Asset
 import gaia.managers.assets.AssetManager.Companion.get
+import gaia.ui.generic.Label
+import gaia.ui.utils.alignBottom
 import screens.aoc.AdventScreen
 
 class Day2 : AdventScreen("day2") {
@@ -32,7 +35,6 @@ class Day2 : AdventScreen("day2") {
     val allGamesPanel by lazy { GamesPanel() }
 
     private fun visuals() {
-
         val games = getInput().map { line ->
             val gameId = line.split(":").first().split(" ").last().toInt()
             val games = line.split(":").last().drop(1).split("; ")
@@ -46,7 +48,26 @@ class Day2 : AdventScreen("day2") {
             }
             CoolGame(gameId, throws)
         }
-        hudCrew.addMember(allGamesPanel)
+        val redLabel = Label("Red: 12", MegaManagers.fontManager.largeFont).apply {
+            x = -200f
+            alignBottom(100f)
+        }
+        val greenLabel = Label("Green: 13", MegaManagers.fontManager.largeFont).apply {
+            x = 0f
+            alignBottom(100f)
+        }
+        val blueLabel = Label("Blue: 14", MegaManagers.fontManager.largeFont).apply {
+            x = 200f
+            alignBottom(100f)
+        }
+        val bottomPanel = BaseNinePatchActor(GamesPanel.ninepatch).apply {
+            width = 700f
+            height = 150f
+            center()
+            x += 50
+            alignBottom(25f)
+        }
+        hudCrew.addMembers(allGamesPanel, bottomPanel, redLabel, greenLabel, blueLabel)
         allGamesPanel.newGame()
         val throws = games.first().throws
         handleThrow(throws, 0, games, 0)

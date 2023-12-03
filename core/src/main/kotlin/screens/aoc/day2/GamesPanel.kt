@@ -51,6 +51,6 @@ class GamesPanel : BaseNinePatchActor(ninepatch) {
         @Asset
         private val texture = AssetDescriptor(Assets.small_panel, Texture::class.java)
 
-        private val ninepatch by lazy { NinePatch(texture.get(), 14, 14, 14, 14) }
+        val ninepatch by lazy { NinePatch(texture.get(), 14, 14, 14, 14) }
     }
 }
