@@ -35,7 +35,7 @@ class GamesPanel : BaseNinePatchActor(ninepatch) {
         val label = Label("Game ${currentGame}", MegaManagers.fontManager.defaultFont)
         label.centerOn(this)
         label.alignTopToTopOf(this, -10f)
-        label.alignLeftToLeftOf(this, 20f + 105 * (currentGame / 35))
+        label.alignLeftToLeftOf(this, 20f + 107 * (currentGame / 35))
         label.y -= ((currentGame) % 35) * 20
         gameLabels.add(label)
         crew?.addMember(label)

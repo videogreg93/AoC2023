@@ -26,6 +26,8 @@ class Day2 : AdventScreen("day2") {
         visuals()
     }
 
+    var isfinished = false
+
     var presents = arrayListOf<BaseActor>()
     val allGamesPanel by lazy { GamesPanel() }
 
@@ -85,7 +87,12 @@ class Day2 : AdventScreen("day2") {
     private fun startNextGame(gamesIndex: Int, games: List<CoolGame>) {
         val newGamesIndex = gamesIndex + 1
         val newThrowIndex = 0
-        val newThrows = games[gamesIndex].throws
+        val game = games.getOrNull(gamesIndex)
+        if (game == null) {
+            isfinished = true
+            return
+        }
+        val newThrows = game.throws
         allGamesPanel.newGame()
         handleThrow(newThrows, newThrowIndex, games, newGamesIndex)
     }
@@ -144,7 +151,7 @@ class Day2 : AdventScreen("day2") {
     }
 
     override fun isDone(): Boolean {
-        return false
+        return isfinished
     }
 
     companion object {
