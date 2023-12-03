@@ -41,7 +41,7 @@ class SpeedSlider(var text: String = ""): BaseActor(barTexture.get()) {
         label.addAction(Actions.forever(Actions.run {
             label.centerOn(this)
             label.y += 15f
-            val goodValue = ((value * 10) * 10).toInt() / 10f
+            val goodValue = ((value * 50) * 10).toInt() / 10f
             label.text = if (Globals.gameSpeed < 50f) "$text: ${(goodValue)}" else "Speed: INSANE"
         }))
         addAction(Actions.forever(Actions.run {

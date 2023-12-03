@@ -27,9 +27,10 @@ class Day2 : AdventScreen("day2") {
     }
 
     var presents = arrayListOf<BaseActor>()
+    val allGamesPanel by lazy { GamesPanel() }
 
     private fun visuals() {
-        val allGamesPanel = GamesPanel()
+
         val games = getInput().map { line ->
             val gameId = line.split(":").first().split(" ").last().toInt()
             val games = line.split(":").last().drop(1).split("; ")
@@ -43,33 +44,50 @@ class Day2 : AdventScreen("day2") {
             }
             CoolGame(gameId, throws)
         }
-        val game = games.first()
         hudCrew.addMember(allGamesPanel)
-        val throws = game.throws
-        handleThrow(throws, 0)
+        allGamesPanel.newGame()
+        val throws = games.first().throws
+        handleThrow(throws, 0, games, 0)
 
     }
 
-    fun handleThrow(throws: List<CoolGame.Throw>, throwIndex: Int) {
+    fun handleThrow(throws: List<CoolGame.Throw>, throwIndex: Int, games: List<CoolGame>, gamesIndex: Int) {
         var thrw = throws.getOrNull(throwIndex)
         if (thrw != null) {
             val waitTime = (maxOf(thrw.redCount, thrw.greenCount, thrw.blueCount) * 0.5f) + 1f
             repeat(thrw.redCount) {
-                addPresent(redGiftTexture.get(), -400, it)
+                addPresent(redGiftTexture.get(), -500, it)
             }
             repeat(thrw.greenCount) {
-                addPresent(greenGiftTexture.get(), -100, it)
+                addPresent(greenGiftTexture.get(), 0, it)
             }
             repeat(thrw.blueCount) {
-                addPresent(blueGiftTexture.get(), 300, it)
+                addPresent(blueGiftTexture.get(), 550, it)
             }
             MegaManagers.screenManager.addGlobalAction(Actions.delay(waitTime, Actions.run {
                 presents.forEach {
                     it.removeFromCrew()
                 }
-                handleThrow(throws, throwIndex + 1)
+                if (thrw.redCount > 12 || thrw.greenCount > 13 || thrw.blueCount > 14) {
+                    // game invalid
+                    allGamesPanel.updateLabel(false)
+                    startNextGame(gamesIndex, games)
+                } else {
+                    handleThrow(throws, throwIndex + 1, games, gamesIndex)
+                }
             }))
+        } else {
+            allGamesPanel.updateLabel(true)
+            startNextGame(gamesIndex, games)
         }
+    }
+
+    private fun startNextGame(gamesIndex: Int, games: List<CoolGame>) {
+        val newGamesIndex = gamesIndex + 1
+        val newThrowIndex = 0
+        val newThrows = games[gamesIndex].throws
+        allGamesPanel.newGame()
+        handleThrow(newThrows, newThrowIndex, games, newGamesIndex)
     }
 
     private fun addPresent(texture: Texture, startingX: Int, index: Int) {

@@ -26,6 +26,7 @@ class FontManager : MegaManagers.Manager {
                 color = Color.WHITE
             }
         )
+        defaultFont.data.markupEnabled = true
 
         generator.dispose()
     }

@@ -35,7 +35,7 @@ abstract class AdventScreen(day: String): BasicScreen(day) {
             alignLeft(20f)
             forceValue(0.3f)
             onValueChange = {
-                val goodValue = ((it * 10) * 10).toInt() / 10f
+                val goodValue = ((it * 50) * 10).toInt() / 10f
                 Globals.gameSpeed = goodValue
             }
         }
