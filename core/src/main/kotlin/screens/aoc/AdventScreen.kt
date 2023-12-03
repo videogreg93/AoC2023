@@ -1,6 +1,7 @@
 package screens.aoc
 
 import Globals
+import base.BaseActor
 import com.badlogic.gdx.Gdx
 import gaia.base.Clickable
 import gaia.managers.input.ActionListener
@@ -21,9 +22,14 @@ abstract class AdventScreen(day: String): BasicScreen(day) {
     }
 
     abstract fun isDone(): Boolean
+    abstract val background: List<BaseActor>
 
     override fun firstShown() {
         super.firstShown()
+        background.forEach {
+            it.center()
+            backgroundCrew.addMember(it)
+        }
         val slider = SpeedSlider("Speed").apply {
             alignBottom(20f)
             alignLeft(20f)

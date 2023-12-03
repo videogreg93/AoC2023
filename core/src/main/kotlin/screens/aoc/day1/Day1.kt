@@ -18,6 +18,7 @@ import screens.aoc.AdventScreen
 
 class Day1 : AdventScreen("day1") {
 
+    override val background: List<BaseActor> = emptyList()
     private val house1 by lazy {
         BaseActor(houseTexture.get()).apply {
             x = -400f
