@@ -30,6 +30,7 @@ class FontManager : MegaManagers.Manager {
         defaultFont.data.markupEnabled = true
         params.size = 24
         largeFont = generator.generateFont(params)
+        largeFont.data.markupEnabled = true
 
         generator.dispose()
     }

@@ -13,6 +13,8 @@ import gaia.managers.assets.Asset
 import gaia.managers.assets.AssetManager.Companion.get
 import gaia.ui.generic.Label
 import gaia.ui.utils.alignBottom
+import gaia.utils.green
+import gaia.utils.red
 import screens.aoc.AdventScreen
 
 class Day2 : AdventScreen("day2") {
@@ -33,6 +35,31 @@ class Day2 : AdventScreen("day2") {
 
     var presents = arrayListOf<BaseActor>()
     val allGamesPanel by lazy { GamesPanel() }
+    val bustLabel by lazy { ColorLabel("BUST", "").apply {
+        center()
+        x += 200f
+        y += 100f
+        shouldDraw = false
+    } }
+
+    val redLabel by lazy {
+        ColorLabel("12 <= ", "?").apply {
+            x = -500f
+            alignBottom(100f)
+        }
+    }
+    val greenLabel by lazy {
+        ColorLabel("13 <= ", "?").apply {
+            x = 0f
+            alignBottom(100f)
+        }
+    }
+    val blueLabel by lazy {
+        ColorLabel("14 <= ", "?").apply {
+            x = 500f
+            alignBottom(100f)
+        }
+    }
 
     private fun visuals() {
         val games = getInput().map { line ->
@@ -48,26 +75,7 @@ class Day2 : AdventScreen("day2") {
             }
             CoolGame(gameId, throws)
         }
-        val redLabel = Label("Red: 12", MegaManagers.fontManager.largeFont).apply {
-            x = -200f
-            alignBottom(100f)
-        }
-        val greenLabel = Label("Green: 13", MegaManagers.fontManager.largeFont).apply {
-            x = 0f
-            alignBottom(100f)
-        }
-        val blueLabel = Label("Blue: 14", MegaManagers.fontManager.largeFont).apply {
-            x = 200f
-            alignBottom(100f)
-        }
-        val bottomPanel = BaseNinePatchActor(GamesPanel.ninepatch).apply {
-            width = 700f
-            height = 150f
-            center()
-            x += 50
-            alignBottom(25f)
-        }
-        hudCrew.addMembers(allGamesPanel, bottomPanel, redLabel, greenLabel, blueLabel)
+        hudCrew.addMembers(allGamesPanel, redLabel, greenLabel, blueLabel, bustLabel)
         allGamesPanel.newGame()
         val throws = games.first().throws
         handleThrow(throws, 0, games, 0)
@@ -87,21 +95,41 @@ class Day2 : AdventScreen("day2") {
             repeat(thrw.blueCount) {
                 addPresent(blueGiftTexture.get(), 550, it)
             }
-            MegaManagers.screenManager.addGlobalAction(Actions.delay(waitTime, Actions.run {
-                presents.forEach {
-                    it.removeFromCrew()
-                }
-                if (thrw.redCount > 12 || thrw.greenCount > 13 || thrw.blueCount > 14) {
-                    // game invalid
-                    allGamesPanel.updateLabel(false)
-                    startNextGame(gamesIndex, games)
-                } else {
-                    handleThrow(throws, throwIndex + 1, games, gamesIndex)
-                }
-            }))
+            MegaManagers.screenManager.addGlobalAction(
+                Actions.sequence(
+                    Actions.delay(waitTime, Actions.run {
+                        redLabel.count = thrw.redCount.toString()
+                        greenLabel.count = thrw.greenCount.toString()
+                        blueLabel.count = thrw.blueCount.toString()
+                    }),
+                    Actions.delay(6f, Actions.run {
+                        presents.forEach {
+                            it.removeFromCrew()
+                        }
+                        listOf(redLabel, greenLabel, blueLabel).forEach { it.count = "?" }
+                        if (thrw.redCount > 12 || thrw.greenCount > 13 || thrw.blueCount > 14) {
+                            // game invalid
+                            bustLabel.shouldDraw = true
+                            bustLabel.baseText = "Bust!".red()
+                            bustLabel.addAction(Actions.delay(12f, Actions.run {
+                                bustLabel.shouldDraw = false
+                                allGamesPanel.updateLabel(false)
+                                startNextGame(gamesIndex, games)
+                            }))
+                        } else {
+                            handleThrow(throws, throwIndex + 1, games, gamesIndex)
+                        }
+                    })
+                )
+            )
         } else {
             allGamesPanel.updateLabel(true)
-            startNextGame(gamesIndex, games)
+            bustLabel.shouldDraw = true
+            bustLabel.baseText = "Valid Game!".green()
+            bustLabel.addAction(Actions.delay(12f, Actions.run {
+                bustLabel.shouldDraw = false
+                startNextGame(gamesIndex, games)
+            }))
         }
     }
 
@@ -112,10 +140,11 @@ class Day2 : AdventScreen("day2") {
         if (game == null) {
             isfinished = true
             return
+        } else {
+            val newThrows = game.throws
+            allGamesPanel.newGame()
+            handleThrow(newThrows, newThrowIndex, games, newGamesIndex)
         }
-        val newThrows = game.throws
-        allGamesPanel.newGame()
-        handleThrow(newThrows, newThrowIndex, games, newGamesIndex)
     }
 
     private fun addPresent(texture: Texture, startingX: Int, index: Int) {
@@ -148,7 +177,7 @@ class Day2 : AdventScreen("day2") {
         println(sum)
     }
 
-    private fun part1() {
+    private fun part1(): Int {
         val testGameMap = mapOf(
             "red" to 12,
             "green" to 13,
@@ -169,10 +198,19 @@ class Day2 : AdventScreen("day2") {
             }
         }.sumOf { it.id }
         println(sum)
+        return sum
     }
 
     override fun isDone(): Boolean {
         return isfinished
+    }
+
+    override fun onFinish() {
+        part1()
+        ColorLabel(part1().toString(), "").apply {
+            center()
+            this@Day2.crew.addMember(this)
+        }
     }
 
     companion object {

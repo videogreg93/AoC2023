@@ -22,6 +22,7 @@ abstract class AdventScreen(day: String): BasicScreen(day) {
     }
 
     abstract fun isDone(): Boolean
+    open fun onFinish() {}
     abstract val background: List<BaseActor>
 
     override fun firstShown() {
@@ -48,9 +49,17 @@ abstract class AdventScreen(day: String): BasicScreen(day) {
         hudCrew.addMembers(slider, insaneButton)
     }
 
+    var calledFinished = false
+
     override fun render(delta: Float) {
         super.render(delta)
-        if (isDone()) Globals.gameSpeed = 1f
+        if (isDone()) {
+            Globals.gameSpeed = 1f
+            if (!calledFinished) {
+                calledFinished = true
+                onFinish()
+            }
+        }
     }
 
     override fun onAction(action: ActionListener.InputAction): Boolean {
