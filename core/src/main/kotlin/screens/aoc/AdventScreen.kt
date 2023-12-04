@@ -4,11 +4,13 @@ import Globals
 import base.BaseActor
 import com.badlogic.gdx.Gdx
 import gaia.base.Clickable
+import gaia.managers.MegaManagers
 import gaia.managers.input.ActionListener
 import gaia.ui.utils.addForeverAction
 import gaia.ui.utils.alignBottom
 import gaia.ui.utils.alignLeft
 import gaia.ui.utils.alignLeftToRightOf
+import screens.aoc.main.CalendarScreen
 import ui.BasicScreen
 
 abstract class AdventScreen(day: String): BasicScreen(day) {
@@ -79,6 +81,9 @@ abstract class AdventScreen(day: String): BasicScreen(day) {
                         else -> {}
                     }
                 }
+            }
+            ActionListener.InputAction.QUIT -> {
+                MegaManagers.screenManager.returnToScreen(CalendarScreen::class.java, true)
             }
             else -> {
                 return false
