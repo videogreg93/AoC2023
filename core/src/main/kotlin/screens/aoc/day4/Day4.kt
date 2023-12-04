@@ -1,12 +1,12 @@
 package screens.aoc.day4
 
-import base.BaseActor
+import Globals
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import gaia.ui.utils.alignBottom
 import screens.aoc.AdventScreen
 import kotlin.math.pow
 
-class Day4: AdventScreen("day4") {
-
-    override val background: List<BaseActor> = emptyList()
+class Day4 : AdventScreen("day4") {
 
     override fun isDone(): Boolean {
         return false
@@ -27,11 +27,24 @@ class Day4: AdventScreen("day4") {
             val winningCount = myNumbers.count { winningNumbers.contains(it) }
             Card(winningNumbers, myNumbers, winningCount, 1)
         }
+        val masterSequence = Actions.sequence()
         cardArray.forEachIndexed { index, card ->
             repeat(card.copyPower) {
                 cardArray[index + (it + 1)].count += card.count
             }
         }
+        val startingX = -Globals.WORLD_WIDTH/2f
+        cardArray.forEachIndexed { index, card ->
+            val cardChest = CardChest("$index", card)
+            cardChest.alignBottom(300f)
+            cardChest.x = startingX + index * 60f
+            crew.addMember(cardChest)
+        }
+
+
+
+
+
         val answer = cardArray.sumOf { it.count }
         println(answer)
     }

@@ -16,6 +16,8 @@ const val button = "buttons/button.png"
 const val button_pressed = "buttons/button_pressed.png"
 const val insane = "buttons/insane.png"
 const val insane_pressed = "buttons/insane_pressed.png"}
+const val chest_closed = "chest_closed.png"
+const val chest_open_animation = "chest_open_animation.png"
 const val elf = "elf.png"
     object Fonts {
 const val FOT_NewRodin_Pro_EB = "fonts/FOT-NewRodin Pro EB.otf"}

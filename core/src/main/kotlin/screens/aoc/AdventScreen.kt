@@ -5,11 +5,13 @@ import base.BaseActor
 import com.badlogic.gdx.Gdx
 import gaia.base.Clickable
 import gaia.managers.MegaManagers
+import gaia.managers.assets.AssetManager.Companion.get
 import gaia.managers.input.ActionListener
 import gaia.ui.utils.addForeverAction
 import gaia.ui.utils.alignBottom
 import gaia.ui.utils.alignLeft
 import gaia.ui.utils.alignLeftToRightOf
+import screens.aoc.day2.Day2
 import screens.aoc.main.CalendarScreen
 import ui.BasicScreen
 
@@ -25,7 +27,7 @@ abstract class AdventScreen(day: String): BasicScreen(day) {
 
     abstract fun isDone(): Boolean
     open fun onFinish() {}
-    abstract val background: List<BaseActor>
+    open val background: List<BaseActor> by lazy { listOf(BaseActor(Day2.backgroundTexture.get())) }
 
     override fun firstShown() {
         super.firstShown()

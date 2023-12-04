@@ -215,7 +215,7 @@ class Day2 : AdventScreen("day2") {
 
     companion object {
         @Asset
-        private val backgroundTexture = AssetDescriptor(Assets.Backgrounds.day2, Texture::class.java)
+        val backgroundTexture = AssetDescriptor(Assets.Backgrounds.day2, Texture::class.java)
 
         @Asset
         private val blueGiftTexture = AssetDescriptor(Assets.gift_blue, Texture::class.java)
