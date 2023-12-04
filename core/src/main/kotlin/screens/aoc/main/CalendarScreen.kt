@@ -11,6 +11,7 @@ import gaia.managers.input.ActionListener
 import screens.aoc.day1.Day1
 import screens.aoc.day2.Day2
 import screens.aoc.day3.Day3
+import screens.aoc.day4.Day4
 import ui.BasicScreen
 
 class CalendarScreen: BasicScreen("Calendar Screen") {
@@ -20,7 +21,8 @@ class CalendarScreen: BasicScreen("Calendar Screen") {
     private val existingDays = listOf<BasicScreen>(
         Day1(),
         Day2(),
-        Day3()
+        Day3(),
+        Day4()
     )
 
     override fun firstShown() {
