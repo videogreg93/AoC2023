@@ -1,15 +1,17 @@
 package screens.aoc.day4
 
 import Globals
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import gaia.ui.utils.alignBottom
 import screens.aoc.AdventScreen
 import kotlin.math.pow
 
 class Day4 : AdventScreen("day4") {
+    var finished = false
 
     override fun isDone(): Boolean {
-        return false
+        return finished
     }
 
     override fun firstShown() {
@@ -19,6 +21,34 @@ class Day4 : AdventScreen("day4") {
 
     data class Card(val winningNumbers: List<Int>, val myNumbers: List<Int>, val copyPower: Int, var count: Long)
 
+    fun handleChest(cardArray: List<CardChest>, index: Int) {
+        val slideDelay = 1f
+        val cardChest = cardArray.getOrNull(index)
+        if (cardChest == null) {
+            finished = true
+            return
+        }
+        val cardSequence = Actions.sequence()
+        cardSequence.run {
+            addAction(cardChest.openChestAction())
+            addAction(Actions.delay(2f))
+            addAction(cardChest.closeChestAction())
+            addAction(Actions.delay(2f))
+            addAction(
+                Actions.run {
+                    crew.members.filterIsInstance<CardChest>().forEach {
+                        it.addAction(Actions.moveBy(-60f, 0f, slideDelay, Interpolation.fastSlow))
+                    }
+                }
+            )
+            addAction(Actions.delay(slideDelay))
+            addAction(Actions.run {
+                handleChest(cardArray, index + 1)
+            })
+        }
+        cardChest.addAction(cardSequence)
+    }
+
     private fun part2() {
         val cardArray = getInput().map { line ->
             val card = line.split(": ")[1].split(" | ")
@@ -27,19 +57,21 @@ class Day4 : AdventScreen("day4") {
             val winningCount = myNumbers.count { winningNumbers.contains(it) }
             Card(winningNumbers, myNumbers, winningCount, 1)
         }
-        val masterSequence = Actions.sequence()
         cardArray.forEachIndexed { index, card ->
             repeat(card.copyPower) {
                 cardArray[index + (it + 1)].count += card.count
             }
         }
         val startingX = -Globals.WORLD_WIDTH/2f
-        cardArray.forEachIndexed { index, card ->
-            val cardChest = CardChest("$index", card)
-            cardChest.alignBottom(300f)
-            cardChest.x = startingX + index * 60f
-            crew.addMember(cardChest)
+        val chestArray = cardArray.mapIndexed { index, card ->
+            CardChest("$index", card).apply {
+                alignBottom(300f)
+                x = startingX + index * 60f
+                this@Day4.crew.addMember(this)
+            }
         }
+        handleChest(chestArray, 0)
+
 
 
 
