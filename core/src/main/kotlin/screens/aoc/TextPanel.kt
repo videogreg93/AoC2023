@@ -5,6 +5,7 @@ import gaia.managers.MegaManagers
 import gaia.ui.generic.Label
 import gaia.ui.utils.addForeverAction
 import screens.aoc.day2.GamesPanel
+import kotlin.math.max
 
 class TextPanel(var baseText: String): BaseNinePatchActor(GamesPanel.ninepatch) {
     private val baseLabel = Label(baseText, MegaManagers.fontManager.largeFont).apply {
@@ -17,7 +18,8 @@ class TextPanel(var baseText: String): BaseNinePatchActor(GamesPanel.ninepatch) 
         width = 300f
         height = 150f
         addForeverAction {
-            width = baseLabel.width * 1.2f
+            width = max(baseLabel.width * 1.2f, 150f)
+            height = max(150f, baseLabel.height * 2)
         }
         baseLabel.addForeverAction {
             baseLabel.centerOn(this)

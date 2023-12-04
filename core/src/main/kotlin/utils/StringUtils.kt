@@ -8,10 +8,10 @@ import java.util.*
 /**
  * Returns a string with new line characters every couple of words
  */
-fun String.wrapped(font: BitmapFont, maxWidth: Int): String {
+fun String.wrapped(font: BitmapFont, maxWidth: Int, delimiter: String = ""): String {
     var result = ""
     var tester = ""
-    val words = this.split("")
+    val words = this.split(delimiter)
     words.forEachIndexed { index, word ->
         tester += "$word "
         if (index == words.size - 1) {
